@@ -1,7 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Phone, Mail, MapPin, Send, Clock, Calendar, Check, ArrowUpRight, MessageCircle } from 'lucide-react';
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (container: HTMLElement, options: Record<string, unknown>) => string;
+      remove?: (widgetId: string) => void;
+    };
+  }
+}
 
 const SECTION_LABEL = 'inline-flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-gold-600 font-semibold';
 
@@ -17,9 +26,56 @@ const SERVICES = [
 
 export default function ContactPage() {
   const [form, setForm] = useState({
-    nom: '', entreprise: '', email: '', telephone: '', ville: '', service: 'diagnostic', message: '',
+    nom: '', entreprise: '', email: '', telephone: '', ville: '', service: 'diagnostic', message: '', website: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState('');
+  const turnstileRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+
+  useEffect(() => {
+    if (!turnstileSiteKey || !turnstileRef.current) return;
+    let cancelled = false;
+    const renderWidget = () => {
+      if (cancelled || !window.turnstile || !turnstileRef.current || widgetIdRef.current) return;
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: turnstileSiteKey,
+        callback: (token: string) => setTurnstileToken(token),
+        'expired-callback': () => setTurnstileToken(''),
+        'error-callback': () => setTurnstileToken(''),
+        theme: 'light',
+      });
+    };
+    if (window.turnstile) {
+      renderWidget();
+    } else {
+      let script = document.querySelector<HTMLScriptElement>('script[data-nexus-turnstile]');
+      if (!script) {
+        script = document.createElement('script');
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        script.async = true;
+        script.defer = true;
+        script.dataset.nexusTurnstile = 'true';
+        document.head.appendChild(script);
+      }
+      script.addEventListener('load', renderWidget);
+      return () => {
+        cancelled = true;
+        script?.removeEventListener('load', renderWidget);
+        if (widgetIdRef.current && window.turnstile?.remove) window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      };
+    }
+    return () => {
+      cancelled = true;
+      if (widgetIdRef.current && window.turnstile?.remove) window.turnstile.remove(widgetIdRef.current);
+      widgetIdRef.current = null;
+    };
+  }, [turnstileSiteKey]);
 
   const update = (field: string, value: string) => setForm((f) => ({ ...f, [field]: value }));
 
@@ -47,10 +103,54 @@ ${form.message || '—'}`;
     return `mailto:contact@nexus-intelligence.cm?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    window.open(buildWhatsApp(), '_blank');
+    setSubmitError('');
+    if (!turnstileSiteKey) {
+      setSubmitError('Le formulaire sécurisé est en cours de configuration. Vous pouvez nous joindre directement par WhatsApp ou email.');
+      return;
+    }
+    if (!turnstileToken) {
+      setSubmitError('Veuillez terminer la vérification anti-robot.');
+      return;
+    }
+    if (!consent) {
+      setSubmitError('Veuillez confirmer votre consentement au traitement de votre demande.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.nom,
+          email: form.email,
+          phone: form.telephone,
+          company: form.entreprise,
+          service: SERVICES.find((s) => s.value === form.service)?.label || form.service,
+          message: form.message,
+          consent: true,
+          turnstileToken,
+          website: form.website,
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(typeof result.error === 'string' ? result.error : 'La demande n’a pas pu être transmise.');
+      }
+      setSubmitted(true);
+      setTurnstileToken('');
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Erreur inattendue. Réessayez ou contactez-nous directement.');
+      if (window.turnstile && widgetIdRef.current) {
+        window.turnstile.remove?.(widgetIdRef.current);
+        widgetIdRef.current = null;
+        setTurnstileToken('');
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -83,9 +183,9 @@ ${form.message || '—'}`;
                     <div className="w-16 h-16 bg-gold-500 flex items-center justify-center mx-auto mb-6">
                       <Check className="w-8 h-8 text-navy-900" />
                     </div>
-                    <h2 className="font-serif text-3xl font-light text-navy-900 mb-4">Votre message est prêt à partir</h2>
+                    <h2 className="font-serif text-3xl font-light text-navy-900 mb-4">Votre demande a été transmise</h2>
                     <p className="text-navy-800/80 mb-8 max-w-md mx-auto">
-                      Une fenêtre WhatsApp s'est ouverte avec votre message pré-rempli. Si elle ne s'est pas ouverte, utilisez les boutons ci-dessous.
+                      Votre demande a été enregistrée. Notre équipe vous recontactera sous 24 heures ouvrées. Vous pouvez aussi choisir un canal de contact direct ci-dessous.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <a href={buildWhatsApp()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white text-xs font-semibold tracking-wider uppercase hover:bg-emerald-500">
@@ -105,6 +205,9 @@ ${form.message || '—'}`;
                     <p className="text-sm text-navy-800/60 mb-8">Les champs marqués d'un * sont requis.</p>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
+                      <div aria-hidden="true" className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
+                        <label>Ne pas remplir ce champ<input tabIndex={-1} autoComplete="off" value={form.website} onChange={(e) => update('website', e.target.value)} /></label>
+                      </div>
                       <div className="grid sm:grid-cols-2 gap-5">
                         <div>
                           <label className="block text-[10px] tracking-[0.2em] uppercase text-navy-800/60 font-semibold mb-2">Nom complet *</label>
@@ -142,15 +245,24 @@ ${form.message || '—'}`;
 
                       <div>
                         <label className="block text-[10px] tracking-[0.2em] uppercase text-navy-800/60 font-semibold mb-2">Votre message</label>
-                        <textarea value={form.message} onChange={(e) => update('message', e.target.value)} rows={4} placeholder="Décrivez brièvement votre situation, vos enjeux ou vos questions..." className="w-full px-4 py-3 bg-cream-50 border border-stone-300 text-navy-900 text-sm focus:border-gold-500 outline-none resize-none" />
+                        <textarea required minLength={10} maxLength={5000} value={form.message} onChange={(e) => update('message', e.target.value)} rows={4} placeholder="Décrivez brièvement votre situation, vos enjeux ou vos questions..." className="w-full px-4 py-3 bg-cream-50 border border-stone-300 text-navy-900 text-sm focus:border-gold-500 outline-none resize-none" />
                       </div>
 
-                      <button type="submit" className="w-full px-6 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy-800 transition-colors btn-primary inline-flex items-center justify-center gap-2">
+                      <div>
+                        <div ref={turnstileRef} className="min-h-[65px]" />
+                        {!turnstileSiteKey && <p className="text-xs text-amber-800">Vérification anti-robot non configurée : utilisez temporairement les coordonnées directes.</p>}
+                      </div>
+                      <label className="flex items-start gap-3 text-xs text-navy-800/70">
+                        <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} required className="mt-0.5" />
+                        <span>J’accepte que les informations transmises soient utilisées pour répondre à ma demande de contact. *</span>
+                      </label>
+                      {submitError && <p role="alert" className="rounded border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{submitError}</p>}
+                      <button type="submit" disabled={submitting || !turnstileSiteKey} className="w-full px-6 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy-800 transition-colors btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50">
                         <Send className="w-4 h-4" />
-                        Envoyer ma demande
+                        {submitting ? 'Transmission en cours…' : 'Envoyer ma demande'}
                       </button>
                       <p className="text-xs text-navy-800/50 text-center">
-                        En envoyant ce formulaire, votre message s'ouvre dans WhatsApp pré-rempli. Vous gardez le contrôle de l'envoi.
+                        Votre demande est transmise de manière sécurisée à notre équipe. Les champs marqués d’un * sont requis.
                       </p>
                     </form>
                   </>
