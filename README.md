@@ -97,9 +97,18 @@ Tout le texte est dans les fichiers `app/*/page.tsx`. Pour modifier :
 - **Photo fondateur** (`app/a-propos/page.tsx`) : actuellement une lettre stylisée "P", tu peux mettre ta vraie photo
 - **Réseaux sociaux** (`components/Footer.tsx`) : les liens LinkedIn/Facebook sont en `#`, mets tes vraies URLs
 
-### Connecter le formulaire de contact à un vrai envoi
+### Formulaire de contact sécurisé vers NEXUS Pipeline
 
-Actuellement le formulaire de contact ouvre WhatsApp pré-rempli (fonctionne parfaitement, zéro config). Si tu veux plus tard recevoir les demandes par email automatiquement, on pourra brancher un service comme Formspree ou Resend (gratuit). Reviens me voir pour ça.
+Le formulaire utilise maintenant un proxy serveur `POST /api/contact` qui transmet les demandes à `NEXUS_PIPELINE_INQUIRY_API_URL`. La vitrine ne reçoit jamais de clé Supabase ni de clé secrète du CRM.
+
+Variables Vercel à configurer :
+- `NEXUS_PIPELINE_INQUIRY_API_URL` : `https://nexus-pipeline-beryl.vercel.app/api/public/inquiries`
+- `NEXUS_PIPELINE_INQUIRY_ORIGIN` : origine autorisée `https://nexus-vitrine.vercel.app`
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` : clé publique Cloudflare Turnstile du domaine de la vitrine.
+
+Dans le projet Vercel `nexus-pipeline`, configurer aussi côté serveur `TURNSTILE_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY` et `IP_HASH_SALT`. Ne jamais publier ces secrets ni les ajouter au dépôt Git. Le formulaire reste désactivé si la clé publique Turnstile manque ; l'API Pipeline échoue fermée si les secrets serveur manquent.
+
+Les demandes sont stockées dans la table Supabase `inbound_inquiries`. Une future vue interne doit les afficher uniquement après authentification et autorisation dans NEXUS App ; ne jamais exposer cette table directement aux clients Pipeline.
 
 ### Le lead magnet (guide téléchargeable)
 
