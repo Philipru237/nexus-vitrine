@@ -29,6 +29,7 @@ export default function ContactPage() {
     nom: '', entreprise: '', email: '', telephone: '', ville: '', service: 'diagnostic', message: '', website: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [fallbackSent, setFallbackSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [consent, setConsent] = useState(false);
@@ -107,7 +108,9 @@ ${form.message || '—'}`;
     e.preventDefault();
     setSubmitError('');
     if (!turnstileSiteKey) {
-      setSubmitError('Le formulaire sécurisé est en cours de configuration. Vous pouvez nous joindre directement par WhatsApp ou email.');
+      setFallbackSent(true);
+      setSubmitted(true);
+      window.open(buildWhatsApp(), '_blank', 'noopener,noreferrer');
       return;
     }
     if (!turnstileToken) {
@@ -185,7 +188,9 @@ ${form.message || '—'}`;
                     </div>
                     <h2 className="font-serif text-3xl font-light text-navy-900 mb-4">Votre demande a été transmise</h2>
                     <p className="text-navy-800/80 mb-8 max-w-md mx-auto">
-                      Votre demande a été enregistrée. Notre équipe vous recontactera sous 24 heures ouvrées. Vous pouvez aussi choisir un canal de contact direct ci-dessous.
+                      {fallbackSent
+                        ? "La transmission automatique au CRM n’est pas encore configurée. WhatsApp s’est ouvert avec votre message pré-rempli : vérifiez puis envoyez-le pour nous contacter."
+                        : "Votre demande a été enregistrée. Notre équipe vous recontactera sous 24 heures ouvrées. Vous pouvez aussi choisir un canal de contact direct ci-dessous."}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <a href={buildWhatsApp()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white text-xs font-semibold tracking-wider uppercase hover:bg-emerald-500">
@@ -250,14 +255,14 @@ ${form.message || '—'}`;
 
                       <div>
                         <div ref={turnstileRef} className="min-h-[65px]" />
-                        {!turnstileSiteKey && <p className="text-xs text-amber-800">Vérification anti-robot non configurée : utilisez temporairement les coordonnées directes.</p>}
+                        {!turnstileSiteKey && <p className="text-xs text-amber-800">Le formulaire CRM sécurisé est en cours de configuration. L’envoi basculera temporairement vers WhatsApp.</p>}
                       </div>
                       <label className="flex items-start gap-3 text-xs text-navy-800/70">
                         <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} required className="mt-0.5" />
                         <span>J’accepte que les informations transmises soient utilisées pour répondre à ma demande de contact. *</span>
                       </label>
                       {submitError && <p role="alert" className="rounded border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">{submitError}</p>}
-                      <button type="submit" disabled={submitting || !turnstileSiteKey} className="w-full px-6 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy-800 transition-colors btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50">
+                      <button type="submit" disabled={submitting} className="w-full px-6 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy-800 transition-colors btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50">
                         <Send className="w-4 h-4" />
                         {submitting ? 'Transmission en cours…' : 'Envoyer ma demande'}
                       </button>
