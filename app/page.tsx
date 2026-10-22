@@ -150,6 +150,33 @@ export default function HomePage() {
       </Section>
 
       {/* ===========================================
+          PRODUIT — NEXUS PIPELINE
+      ============================================ */}
+      <Section className="bg-cream-100 border-y border-stone-200">
+        <Container>
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <div className="lg:col-span-7">
+              <SectionLabel className="mb-6">Notre outil commercial</SectionLabel>
+              <EditorialHeading className="text-4xl lg:text-6xl mb-6">
+                Découvrez <em className="italic text-gold-600">NEXUS Pipeline</em>.
+              </EditorialHeading>
+              <p className="text-lg text-navy-800/80 leading-relaxed max-w-2xl">
+                Un CRM conçu pour structurer le suivi des prospects, des clients et des opportunités commerciales de votre PME.
+              </p>
+            </div>
+            <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-4 lg:items-start">
+              <Link href="/pipeline" className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
+                Découvrir le CRM <ArrowUpRight className="w-4 h-4" />
+              </Link>
+              <Link href="/pipeline" className="inline-flex items-center gap-2 text-sm font-semibold text-navy-900 hover:text-gold-600 transition-colors">
+                Fonctionnalités et accès <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* ===========================================
           MÉTHODE — Aperçu
       ============================================ */}
       <Section dark className="grain">
