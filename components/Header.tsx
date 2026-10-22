@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 
 const NAV_ITEMS = [
+  { href: '/pipeline', label: 'NEXUS Pipeline' },
   { href: '/services', label: 'Services' },
   { href: '/methode', label: 'Méthode' },
   { href: '/cas-clients', label: 'Cas clients' },
