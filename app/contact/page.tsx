@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Phone, Mail, MapPin, Send, Clock, Calendar, Check, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { PIPELINE_LOGIN_URL, PIPELINE_SERVICE_OPTIONS, PIPELINE_SERVICE_PREFIX } from '@/lib/pipeline';
 
 declare global {
   interface Window {
@@ -20,6 +21,7 @@ const SERVICES = [
   { value: 'starter', label: 'Retainer Starter (180 000 FCFA/mois)' },
   { value: 'growth', label: 'Retainer Growth (420 000 FCFA/mois)' },
   { value: 'cfo', label: 'Performance CFO (900 000 FCFA/mois)' },
+  ...PIPELINE_SERVICE_OPTIONS,
   { value: 'decouverte', label: "Appel découverte gratuit (30 min)" },
   { value: 'autre', label: 'Autre / je ne sais pas encore' },
 ];
@@ -79,6 +81,14 @@ export default function ContactPage() {
   }, [turnstileSiteKey]);
 
   const update = (field: string, value: string) => setForm((f) => ({ ...f, [field]: value }));
+
+  // Préselection de l'offre via /contact?service=... (liens des pages Services et NEXUS Pipeline)
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('service');
+    if (requested && SERVICES.some((o) => o.value === requested)) {
+      setForm((f) => ({ ...f, service: requested }));
+    }
+  }, []);
 
   const buildWhatsApp = () => {
     const serviceLabel = SERVICES.find((s) => s.value === form.service)?.label || form.service;
@@ -169,7 +179,7 @@ ${form.message || '—'}`;
               Démarrons la <em className="italic text-gold-600">conversation</em>.
             </h1>
             <p className="font-serif text-xl lg:text-2xl text-navy-800/80 leading-relaxed font-light">
-              Réservez un Diagnostic 360°, planifiez un appel découverte gratuit, ou posez simplement votre question. Réponse sous 24 heures ouvrées.
+              Réservez un Diagnostic 360°, souscrivez à NEXUS Pipeline, planifiez un appel découverte gratuit, ou posez simplement votre question. Réponse sous 24 heures ouvrées.
             </p>
           </div>
         </div>
@@ -192,6 +202,17 @@ ${form.message || '—'}`;
                         ? "La transmission automatique au CRM n’est pas encore configurée. WhatsApp s’est ouvert avec votre message pré-rempli : vérifiez puis envoyez-le pour nous contacter."
                         : "Votre demande a été enregistrée. Notre équipe vous recontactera sous 24 heures ouvrées. Vous pouvez aussi choisir un canal de contact direct ci-dessous."}
                     </p>
+                    {form.service.startsWith(PIPELINE_SERVICE_PREFIX) && (
+                      <div className="max-w-md mx-auto mb-8 p-5 bg-cream-50 border border-stone-200 text-left">
+                        <div className="text-xs font-semibold tracking-wider uppercase text-gold-600 mb-2">Prochaine étape : NEXUS Pipeline</div>
+                        <p className="text-sm text-navy-800/80 mb-4">
+                          Notre équipe confirme et active votre offre sous 24 heures ouvrées. Une fois votre offre souscrite, accédez à votre espace NEXUS Pipeline.
+                        </p>
+                        <a href={PIPELINE_LOGIN_URL} className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-navy-900 hover:text-gold-600">
+                          Accéder à NEXUS Pipeline <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    )}
                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                       <a href={buildWhatsApp()} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white text-xs font-semibold tracking-wider uppercase hover:bg-emerald-500">
                         <MessageCircle className="w-4 h-4" /> Envoyer via WhatsApp

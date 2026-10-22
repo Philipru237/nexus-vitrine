@@ -38,6 +38,7 @@ export function Footer() {
                 <li><Link href="/services#sprint" className="hover:text-gold-500 transition-colors">Sprint Stratégie</Link></li>
                 <li><Link href="/services#retainers" className="hover:text-gold-500 transition-colors">Missions récurrentes</Link></li>
                 <li><Link href="/services#cfo" className="hover:text-gold-500 transition-colors">DAF externalisé</Link></li>
+                <li><Link href="/services#pipeline" className="hover:text-gold-500 transition-colors">NEXUS Pipeline (SaaS)</Link></li>
               </ul>
             </div>
             <div>
