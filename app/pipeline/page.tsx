@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight, CheckCircle2, ChartNoAxesCombined, Users, Workflow, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, BarChart3, Users, Workflow, ShieldCheck } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'NEXUS Pipeline — CRM pour PME',
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const features = [
   { icon: Users, title: 'Prospects et clients', text: 'Centralisez les contacts, entreprises et échanges dans un espace commercial organisé.' },
   { icon: Workflow, title: 'Pipeline de vente', text: 'Suivez les opportunités par étape et identifiez les prochaines actions à mener.' },
-  { icon: ChartNoAxesCombined, title: 'Pilotage commercial', text: 'Visualisez les activités et les indicateurs utiles à votre suivi commercial.' },
+  { icon: BarChart3, title: 'Pilotage commercial', text: 'Visualisez les activités et les indicateurs utiles à votre suivi commercial.' },
   { icon: ShieldCheck, title: 'Espace de travail séparé', text: 'L’accès aux données doit être contrôlé par compte et par rôle, selon la configuration effective de l’application.' },
 ];
 
