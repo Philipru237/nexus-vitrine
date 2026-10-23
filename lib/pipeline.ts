@@ -3,6 +3,8 @@
 
 export const PIPELINE_APP_URL = (process.env.NEXT_PUBLIC_PIPELINE_APP_URL || 'https://nexus-pipeline-beryl.vercel.app').replace(/\/+$/, '');
 export const PIPELINE_LOGIN_URL = `${PIPELINE_APP_URL}/login`;
+/** Création de compte NEXUS Pipeline avec l'offre choisie (essai de 7 jours, puis confirmation de l'offre dans le SaaS). */
+export const pipelineRegisterUrl = (code: PipelinePlan['code']) => `${PIPELINE_APP_URL}/register?plan=${code}`;
 
 export type PipelinePlan = {
   code: 'starter' | 'growth' | 'business';

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Check, ArrowUpRight } from 'lucide-react';
-import { PIPELINE_PLANS, PIPELINE_LOGIN_URL, fcfa } from '@/lib/pipeline';
+import { PIPELINE_PLANS, PIPELINE_LOGIN_URL, fcfa, pipelineRegisterUrl } from '@/lib/pipeline';
 
 export function PipelinePlans() {
   return (
@@ -34,13 +34,16 @@ export function PipelinePlans() {
             </ul>
 
             <div className="mt-auto">
-              <Link
-                href={`/contact?service=${p.service}`}
+              <a
+                href={pipelineRegisterUrl(p.code)}
                 className={`inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold tracking-[0.15em] uppercase transition-colors ${
                   p.featured ? 'bg-gold-500 text-navy-900 hover:bg-gold-400' : 'bg-navy-900 text-cream-50 hover:bg-navy-800'
                 }`}
               >
                 Souscrire <ArrowUpRight className="w-4 h-4" />
+              </a>
+              <Link href={`/contact?service=${p.service}`} className="mt-3 block text-center text-xs underline underline-offset-4 opacity-70 hover:opacity-100">
+                Être accompagné pour souscrire
               </Link>
             </div>
           </article>
@@ -51,16 +54,16 @@ export function PipelinePlans() {
         <div className="p-6 bg-cream-100 border border-stone-200">
           <h4 className="font-serif text-xl text-navy-900 mb-2">Comment souscrire ?</h4>
           <ol className="text-sm text-navy-800/80 space-y-1.5 list-decimal pl-5">
-            <li>Choisissez votre offre et envoyez votre demande de souscription.</li>
-            <li>Notre équipe confirme et active votre offre sous 24 heures ouvrées.</li>
-            <li>Vous accédez ensuite à votre espace NEXUS Pipeline avec votre compte.</li>
+            <li>Choisissez votre offre et créez votre compte NEXUS Pipeline.</li>
+            <li>Votre essai de 7 jours démarre aussitôt : vous accédez au CRM.</li>
+            <li>Confirmez votre offre depuis votre espace, avant la fin de l'essai.</li>
           </ol>
-          <p className="text-xs text-navy-800/60 mt-3">Règlement en FCFA par Mobile Money (Orange Money, MTN MoMo) ou virement, sans engagement. Le paiement en ligne n'est pas encore disponible : l'activation et le règlement se font avec notre équipe. Un essai gratuit est possible : précisez-le dans votre message.</p>
+          <p className="text-xs text-navy-800/60 mt-3">Règlement en FCFA par Mobile Money (Orange Money, MTN MoMo) ou virement, sans engagement. Le paiement en ligne n'est pas encore disponible : la confirmation de votre offre est finalisée avec notre équipe.</p>
         </div>
         <div className="p-6 bg-cream-100 border border-stone-200 flex flex-col justify-between gap-4">
           <div>
             <h4 className="font-serif text-xl text-navy-900 mb-2">Offre déjà souscrite ?</h4>
-            <p className="text-sm text-navy-800/80">Connectez-vous directement à votre espace NEXUS Pipeline.</p>
+            <p className="text-sm text-navy-800/80">Connectez-vous directement à votre espace NEXUS Pipeline pour accéder à votre CRM.</p>
           </div>
           <a href={PIPELINE_LOGIN_URL} className="inline-flex items-center gap-2 self-start text-xs font-semibold tracking-wider uppercase text-navy-900 hover:text-gold-600">
             Accéder à NEXUS Pipeline <ArrowUpRight className="w-3.5 h-3.5" />
