@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight, ArrowUpRight, BarChart3, Users, Workflow, ShieldCheck } from 'lucide-react';
+import { PipelinePlans } from '@/components/PipelinePlans';
+import { PIPELINE_APP_URL, PIPELINE_LOGIN_URL } from '@/lib/pipeline';
 
 export const metadata: Metadata = {
   title: 'NEXUS Pipeline — CRM pour PME',
@@ -14,7 +16,6 @@ const features = [
   { icon: ShieldCheck, title: 'Espace de travail séparé', text: 'L’accès aux données doit être contrôlé par compte et par rôle, selon la configuration effective de l’application.' },
 ];
 
-const appUrl = 'https://nexus-pipeline-beryl.vercel.app';
 
 export default function PipelinePage() {
   return (
@@ -32,14 +33,14 @@ export default function PipelinePage() {
               NEXUS Pipeline aide les PME à structurer le suivi des prospects, des clients et des opportunités commerciales dans un espace unique.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href={appUrl + '/register'} className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
-                Créer mon compte <ArrowUpRight className="w-4 h-4" />
+              <a href="#offres" className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
+                Voir les offres <ArrowRight className="w-4 h-4" />
               </a>
-              <a href={appUrl + '/login'} className="inline-flex items-center justify-center gap-3 px-7 py-4 border border-navy-900/20 text-navy-900 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-900/5 transition-colors">
-                Se connecter <ArrowRight className="w-4 h-4" />
+              <a href={PIPELINE_LOGIN_URL} className="inline-flex items-center justify-center gap-3 px-7 py-4 border border-navy-900/20 text-navy-900 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-900/5 transition-colors">
+                J’ai déjà un compte <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
-            <p className="text-sm text-navy-800/60 mt-5">L’inscription et la disponibilité des fonctions dépendent de l’état actuel de l’application.</p>
+            <p className="text-sm text-navy-800/60 mt-5">Les comptes sont activés par notre équipe après souscription ; la disponibilité des fonctions dépend de l’état actuel de l’application.</p>
           </div>
         </div>
       </section>
@@ -65,12 +66,25 @@ export default function PipelinePage() {
         </div>
       </section>
 
+      <section id="offres" className="py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="max-w-3xl mb-14">
+            <div className="inline-flex items-center gap-3 text-[10px] tracking-[0.3em] uppercase text-gold-600 font-semibold mb-6">
+              <span className="w-8 h-px bg-gold-600" /> Les offres
+            </div>
+            <h2 className="font-serif font-light text-4xl lg:text-6xl text-navy-900 mb-6">Choisissez la formule <em className="italic text-gold-600">adaptée à votre équipe.</em></h2>
+            <p className="text-lg text-navy-800/80 leading-relaxed">NEXUS Pipeline fait aussi partie de nos <Link href="/services#pipeline" className="underline decoration-gold-600 underline-offset-4 hover:text-gold-600">services</Link>, aux côtés du Diagnostic 360° et du DAF externalisé.</p>
+          </div>
+          <PipelinePlans />
+        </div>
+      </section>
+
       <section className="py-20 lg:py-28">
         <div className="max-w-5xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="font-serif font-light text-4xl lg:text-6xl text-navy-900 mb-6">Prêt à structurer votre suivi commercial ?</h2>
-          <p className="text-lg text-navy-800/80 mb-9">Découvrez l’application et vérifiez les options disponibles pour votre compte.</p>
+          <p className="text-lg text-navy-800/80 mb-9">Déjà client ? Ouvrez votre espace. Pas encore ? Envoyez-nous votre demande de souscription.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href={appUrl} className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
+            <a href={PIPELINE_APP_URL} className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
               Ouvrir NEXUS Pipeline <ArrowUpRight className="w-4 h-4" />
             </a>
             <Link href="/contact" className="inline-flex items-center justify-center gap-3 px-7 py-4 border border-navy-900/20 text-navy-900 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-900/5 transition-colors">
