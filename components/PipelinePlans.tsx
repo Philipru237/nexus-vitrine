@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Check, ArrowUpRight } from 'lucide-react';
-import { PIPELINE_PLANS, PIPELINE_LOGIN_URL, fcfa, pipelineRegisterUrl } from '@/lib/pipeline';
+import { PIPELINE_PLANS, PIPELINE_LOGIN_URL, annualMonthsFree, fcfa, pipelineRegisterUrl } from '@/lib/pipeline';
 
 export function PipelinePlans() {
   return (
@@ -22,6 +22,9 @@ export function PipelinePlans() {
                 <span className={`font-serif text-4xl font-medium ${p.featured ? 'text-gold-500' : 'text-gold-600'}`}>{fcfa(p.monthly)}</span>
                 <span className="text-sm opacity-60">FCFA / mois</span>
               </div>
+              <p className={`mt-2 text-sm ${p.featured ? 'text-cream-50/80' : 'text-navy-800/80'}`}>
+                ou <strong className="font-semibold">{fcfa(p.annual)} FCFA / an</strong>{annualMonthsFree(p) > 0 && <span className="text-gold-600"> · {annualMonthsFree(p)} mois offerts</span>}
+              </p>
             </div>
 
             <ul className="space-y-2.5 text-sm mb-8">
