@@ -40,7 +40,7 @@ export default function PipelinePage() {
                 J’ai déjà un compte <ArrowUpRight className="w-4 h-4" />
               </a>
             </div>
-            <p className="text-sm text-navy-800/60 mt-5">Les comptes sont activés par notre équipe après souscription ; la disponibilité des fonctions dépend de l’état actuel de l’application.</p>
+            <p className="text-sm text-navy-800/60 mt-5">Pas d’essai gratuit : votre espace s’ouvre automatiquement dès la confirmation de votre paiement SasPay.</p>
           </div>
         </div>
       </section>
@@ -82,7 +82,7 @@ export default function PipelinePage() {
       <section className="py-20 lg:py-28">
         <div className="max-w-5xl mx-auto px-6 lg:px-12 text-center">
           <h2 className="font-serif font-light text-4xl lg:text-6xl text-navy-900 mb-6">Prêt à structurer votre suivi commercial ?</h2>
-          <p className="text-lg text-navy-800/80 mb-9">Déjà client ? Ouvrez votre espace. Pas encore ? Envoyez-nous votre demande de souscription.</p>
+          <p className="text-lg text-navy-800/80 mb-9">Déjà client ? Ouvrez votre espace. Pas encore ? Choisissez votre offre et souscrivez en ligne.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a href={PIPELINE_APP_URL} className="inline-flex items-center justify-center gap-3 px-7 py-4 bg-navy-900 text-cream-50 text-xs font-semibold tracking-[0.12em] uppercase hover:bg-navy-800 transition-colors">
               Ouvrir NEXUS Pipeline <ArrowUpRight className="w-4 h-4" />

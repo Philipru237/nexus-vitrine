@@ -58,10 +58,10 @@ export function PipelinePlans() {
           <h4 className="font-serif text-xl text-navy-900 mb-2">Comment souscrire ?</h4>
           <ol className="text-sm text-navy-800/80 space-y-1.5 list-decimal pl-5">
             <li>Choisissez votre offre et créez votre compte NEXUS Pipeline.</li>
-            <li>Votre essai de 7 jours démarre aussitôt : vous accédez au CRM.</li>
-            <li>Confirmez votre offre depuis votre espace, avant la fin de l'essai.</li>
+            <li>Réglez votre forfait en ligne via SasPay, depuis la page de paiement qui s'affiche après la création du compte.</li>
+            <li>Votre espace s'ouvre automatiquement dès que SasPay confirme le paiement.</li>
           </ol>
-          <p className="text-xs text-navy-800/60 mt-3">Règlement en FCFA par Mobile Money (Orange Money, MTN MoMo) ou virement, sans engagement. Le paiement en ligne n'est pas encore disponible : la confirmation de votre offre est finalisée avec notre équipe.</p>
+          <p className="text-xs text-navy-800/60 mt-3">Règlement en FCFA via SasPay, sans essai gratuit : l'accès à votre espace est ouvert uniquement après confirmation du paiement. Un doute ? Notre équipe vous accompagne avant la souscription.</p>
         </div>
         <div className="p-6 bg-cream-100 border border-stone-200 flex flex-col justify-between gap-4">
           <div>

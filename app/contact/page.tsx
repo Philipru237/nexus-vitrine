@@ -206,7 +206,7 @@ ${form.message || '—'}`;
                       <div className="max-w-md mx-auto mb-8 p-5 bg-cream-50 border border-stone-200 text-left">
                         <div className="text-xs font-semibold tracking-wider uppercase text-gold-600 mb-2">Prochaine étape : NEXUS Pipeline</div>
                         <p className="text-sm text-navy-800/80 mb-4">
-                          Notre équipe confirme et active votre offre sous 24 heures ouvrées. Une fois votre offre souscrite, accédez à votre espace NEXUS Pipeline.
+                          Pour ouvrir votre espace, créez votre compte NEXUS Pipeline et réglez votre forfait en ligne : l'accès est activé dès la confirmation du paiement.
                         </p>
                         <a href={PIPELINE_LOGIN_URL} className="inline-flex items-center gap-2 text-xs font-semibold tracking-wider uppercase text-navy-900 hover:text-gold-600">
                           Accéder à NEXUS Pipeline <ArrowUpRight className="w-3.5 h-3.5" />
