@@ -1,10 +1,11 @@
 import { Check, ArrowRight, ArrowUpRight, Briefcase, BarChart3, Activity, Clock, Calendar, FileText, Award, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { SectionLabel, EditorialHeading, ButtonPrimary, ButtonGold, EditorialLink, Container, Section } from '@/components/UI';
+import { PipelinePlans } from '@/components/PipelinePlans';
 
 export const metadata = {
   title: 'Services',
-  description: 'Diagnostic 360°, Sprint Stratégie, DAF externalisé : trois portes d\'entrée pour le pilotage financier de votre PME.',
+  description: 'Diagnostic 360°, Sprint Stratégie, DAF externalisé, et NEXUS Pipeline, le CRM en abonnement : les offres pour piloter votre PME.',
 };
 
 export default function ServicesPage() {
@@ -21,6 +22,9 @@ export default function ServicesPage() {
             </EditorialHeading>
             <p className="font-serif text-xl lg:text-2xl text-navy-800/80 max-w-3xl leading-relaxed font-light">
               De la mission de diagnostic ponctuelle au DAF externalisé en continu, NEXUS Intelligence propose un cheminement gradué. Adapté à votre maturité, votre budget et vos ambitions.
+            </p>
+            <p className="mt-6 text-base text-navy-800/80 max-w-3xl">
+              Pour piloter votre activité commerciale au quotidien, découvrez aussi <Link href="#pipeline" className="underline decoration-gold-600 underline-offset-4 hover:text-gold-600">NEXUS Pipeline, notre CRM en abonnement</Link>.
             </p>
           </div>
         </Container>
@@ -276,6 +280,23 @@ export default function ServicesPage() {
               Tous les retainers démarrent par un Diagnostic 360° offert (valeur 150 000 FCFA) à la signature d'un engagement de 6 mois minimum.
             </p>
           </div>
+        </Container>
+      </section>
+
+      {/* NEXUS PIPELINE — SaaS */}
+      <section id="pipeline" className="py-20 lg:py-28">
+        <Container>
+          <div className="max-w-3xl mb-14">
+            <div className="text-[10px] tracking-[0.3em] uppercase text-gold-600 font-bold mb-4">Offre 04 · Logiciel en abonnement (SaaS)</div>
+            <h2 className="font-serif font-light text-5xl lg:text-7xl text-navy-900 leading-[1.05] mb-6" style={{ letterSpacing: '-0.02em' }}>
+              NEXUS <em className="italic text-gold-600">Pipeline</em>.
+            </h2>
+            <p className="text-lg text-navy-800/80 leading-relaxed mb-4">
+              Le CRM de NEXUS pour les PME : prospects, clients, opportunités et activités commerciales réunis dans un espace unique. Il prolonge nos missions : ce que nous structurons avec vous, votre équipe le suit au quotidien.
+            </p>
+            <EditorialLink href="/pipeline">Découvrir NEXUS Pipeline</EditorialLink>
+          </div>
+          <PipelinePlans />
         </Container>
       </section>
 
